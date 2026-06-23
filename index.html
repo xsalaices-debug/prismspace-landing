@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prismspace — Payment automation for franchise operators</title>
+<meta name="description" content="Prismspace reads your ACH remittance emails, extracts every payment, and creates ready-to-submit batches for QuickBooks and RouteServ. No reconciliation. No spreadsheets.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 13'%3E%3Cpolygon points='7,1 1,12 7,8' fill='%23dbeafe'/%3E%3Cpolygon points='7,1 7,8 13,12' fill='%233b82f6'/%3E%3Cpolygon points='1,12 7,8 13,12' fill='%231d4ed8'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#eef4ff;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased}
+.shell{max-width:1040px;margin:0 auto;padding:32px 20px 56px}
+.ps2{background:#ffffff;color:#0f172a;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.6;border-radius:14px;overflow:hidden;border:0.5px solid #e2e8f0;box-shadow:0 10px 40px rgba(15,23,42,.06)}
+.p2-nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.5rem;border-bottom:.5px solid #e2e8f0;background:#fff}
+.p2-brand{display:flex;align-items:center;gap:8px}
+.p2-wm{font-size:11.5px;font-weight:600;letter-spacing:.15em;color:#0f172a;margin:0}
+.p2-navlinks{display:flex;gap:1.5rem;font-size:11px;color:#94a3b8}
+.p2-navcta{background:transparent;border:.5px solid #dbeafe;padding:5px 14px;border-radius:5px;font-size:11px;font-weight:500;color:#3b82f6;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+.p2-hero{display:grid;grid-template-columns:1fr 1fr;gap:2rem;padding:3rem 1.5rem 2.5rem;align-items:start;background:#fff}
+.p2-ey{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;color:#3b82f6;text-transform:uppercase;margin:0 0 .9rem}
+.p2-h1{font-size:29px;font-weight:700;line-height:1.1;letter-spacing:-.025em;margin:0 0 .9rem;color:#0f172a}
+.p2-h1 em{font-style:normal;color:#3b82f6}
+.p2-hb{font-size:12px;color:#64748b;line-height:1.75;margin:0 0 1.5rem;max-width:280px}
+.p2-acts{display:flex;align-items:center;gap:1rem}
+.p2-fill{background:#3b82f6;border:none;padding:8px 18px;border-radius:6px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+.p2-ghost{background:transparent;border:none;padding:8px 0;font-size:12px;color:#94a3b8;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+.tx2{background:#f8faff;border:.5px solid #e2e8f0;border-radius:9px;overflow:hidden}
+.tx2-before{padding:.85rem 1.1rem;border-bottom:.5px solid #e2e8f0;background:#fff}
+.tx2-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 .5rem}
+.tx2-lbl.b{color:#cbd5e1}
+.tx2-lbl.a{color:#10b981}
+.tx2-code{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#cbd5e1;line-height:1.65;white-space:pre;overflow:hidden}
+.tx2-code .hi{color:#94a3b8}
+.tx2-code .lo{color:#e2e8f0}
+.tx2-mid{display:flex;align-items:center;justify-content:center;gap:.75rem;padding:.6rem 1.1rem;background:#f0f6ff;border-top:.5px solid #e2e8f0;border-bottom:.5px solid #e2e8f0}
+.tx2-tag{font-family:'JetBrains Mono',monospace;font-size:9px;color:#3b82f6;letter-spacing:.08em}
+.tx2-after{padding:.85rem 1.1rem;background:#fff}
+.tx2-tbl{width:100%;border-collapse:collapse;font-size:10px}
+.tx2-tbl th{font-family:'JetBrains Mono',monospace;font-size:8px;color:#cbd5e1;padding:3px 8px 3px 0;border-bottom:.5px solid #f1f5f9;font-weight:400;letter-spacing:.06em;text-align:left}
+.tx2-tbl td{padding:5px 8px 5px 0;color:#94a3b8;border-bottom:.5px solid #f8fafc;vertical-align:middle}
+.tx2-tbl tr:last-child td{border-bottom:none}
+.t2n{color:#0f172a;font-weight:500}
+.t2a{font-family:'JetBrains Mono',monospace;color:#1d4ed8}
+.t2s{color:#10b981;font-family:'JetBrains Mono',monospace;font-size:8px}
+.tx2-tot{font-family:'JetBrains Mono',monospace;font-size:9px;color:#3b82f6;text-align:right;padding:.5rem 1.1rem;background:#f0f6ff;border-top:.5px solid #e2e8f0}
+.p2-stats{display:flex;border-top:.5px solid #e2e8f0;border-bottom:.5px solid #e2e8f0;background:#f0f6ff}
+.p2-stat{flex:1;padding:.9rem 1rem;text-align:center;border-right:.5px solid #e2e8f0}
+.p2-stat:last-child{border-right:none}
+.p2-sn{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:500;color:#0f172a;display:block;letter-spacing:-.01em}
+.p2-sl{font-size:10px;color:#94a3b8;display:block;margin-top:1px}
+.p2-sec{padding:2.5rem 1.5rem;background:#fff}
+.p2-sec-ey{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#3b82f6;margin:0 0 .6rem}
+.p2-sec-h2{font-size:19px;font-weight:700;letter-spacing:-.015em;margin:0 0 1.75rem;color:#0f172a}
+.p2-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.p2-step{border:.5px solid #e2e8f0;border-radius:7px;padding:1.1rem;background:#fff}
+.p2-snum{font-family:'JetBrains Mono',monospace;font-size:8px;color:#cbd5e1;margin:0 0 .65rem;letter-spacing:.1em}
+.p2-sico{width:28px;height:28px;border-radius:6px;background:#f0f6ff;border:.5px solid #dbeafe;display:flex;align-items:center;justify-content:center;margin:0 0 .65rem;color:#3b82f6;font-size:14px}
+.p2-stit{font-size:12px;font-weight:600;margin:0 0 .3rem;color:#0f172a}
+.p2-sbod{font-size:10px;color:#94a3b8;line-height:1.65;margin:0}
+.p2-feats{padding:0 1.5rem 2.5rem;background:#fff}
+.p2-fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#e2e8f0;border:.5px solid #e2e8f0;border-radius:8px;overflow:hidden}
+.p2-fc{background:#fff;padding:1.25rem}
+.p2-ftag{font-family:'JetBrains Mono',monospace;font-size:8px;color:#3b82f6;letter-spacing:.12em;text-transform:uppercase;margin:0 0 .6rem}
+.p2-ftit{font-size:12px;font-weight:600;color:#0f172a;margin:0 0 .35rem}
+.p2-fbod{font-size:10px;color:#94a3b8;line-height:1.65;margin:0}
+.p2-cta{padding:2.5rem 1.5rem;text-align:center;background:#f0f6ff;border-top:.5px solid #e2e8f0}
+.p2-cta-h{font-size:21px;font-weight:700;letter-spacing:-.015em;margin:0 0 .5rem;color:#0f172a}
+.p2-cta-s{font-size:12px;color:#94a3b8;margin:0 0 1.75rem}
+.p2-cta-acts{display:flex;justify-content:center;gap:.75rem}
+.p2-bfl{background:#3b82f6;border:none;padding:9px 22px;border-radius:6px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+.p2-bol{background:#fff;border:.5px solid #dbeafe;padding:9px 18px;border-radius:6px;font-size:12px;font-weight:500;color:#3b82f6;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+.p2-footer{border-top:.5px solid #e2e8f0;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;background:#fff}
+.p2-fcopy{font-size:10px;color:#cbd5e1;margin:0}
+.p2-flinks{display:flex;gap:1.25rem;font-size:10px;color:#cbd5e1}
+@media (max-width:640px){.p2-hero{grid-template-columns:1fr}.p2-steps{grid-template-columns:1fr}.p2-fgrid{grid-template-columns:1fr}.p2-navlinks{display:none}}
+</style>
+</head>
+<body>
+<div class="shell">
+<div class="ps2">
+  <nav class="p2-nav">
+    <div class="p2-brand">
+      <svg viewBox="0 0 22 20" width="20" height="18" aria-hidden="true"><polygon points="11,2 2,18 11,13" fill="#dbeafe"/><polygon points="11,2 11,13 20,18" fill="#3b82f6"/><polygon points="2,18 11,13 20,18" fill="#1d4ed8"/><polygon points="11,2 20,18 2,18" fill="none" stroke="#3b82f6" stroke-width="0.75"/></svg>
+      <span class="p2-wm">PRISMSPACE</span>
+    </div>
+    <div class="p2-navlinks">
+      <span>How it works</span><span>Features</span><span>Pricing</span>
+    </div>
+    <button class="p2-navcta">Request access</button>
+  </nav>
+
+  <div class="p2-hero">
+    <div>
+      <p class="p2-ey">Payment automation — franchise operators</p>
+      <h1 class="p2-h1">One less thing<br>to <em>think about.</em></h1>
+      <p class="p2-hb">Prismspace reads your ACH remittance emails, extracts every payment, and creates ready-to-submit batches for QuickBooks and RouteServ. No reconciliation. No spreadsheets.</p>
+      <div class="p2-acts">
+        <button class="p2-fill">Connect your email</button>
+        <button class="p2-ghost">How it works →</button>
+      </div>
+    </div>
+    <div>
+      <div class="tx2">
+        <div class="tx2-before">
+          <p class="tx2-lbl b">// incoming email</p>
+<div class="tx2-code">From: <span class="hi">ach-remittance@processcorp.com</span>
+Subject: ACH Payment Advice — Apr 2025
+
+BATCH #ACH-0492-B
+<span class="lo">Lyons Plmb LLC   ACH 04/12 $2,847.50 *NET
+Metro Svc Grp    ACH 04/12 $1,204.00 *NET
+Apex Clng Co     ACH 04/12   $890.75 *NET
++11 more... see PDF attachment</span></div>
+        </div>
+        <div class="tx2-mid">
+          <svg viewBox="0 0 28 25" width="24" height="22" aria-hidden="true"><polygon points="14,2 2,23 14,16" fill="#dbeafe"/><polygon points="14,2 14,16 26,23" fill="#3b82f6"/><polygon points="2,23 14,16 26,23" fill="#1d4ed8"/><polygon points="14,2 26,23 2,23" fill="none" stroke="#3b82f6" stroke-width="0.75"/></svg>
+          <span class="tx2-tag">→ parsed + structured</span>
+        </div>
+        <div class="tx2-after">
+          <p class="tx2-lbl a">✓ ready to submit</p>
+          <table class="tx2-tbl">
+            <thead><tr><th>Vendor</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="t2n">Lyons Plumbing</td><td class="t2a">$2,847.50</td><td class="t2s">● ready</td></tr>
+              <tr><td class="t2n">Metro Service</td><td class="t2a">$1,204.00</td><td class="t2s">● ready</td></tr>
+              <tr><td class="t2n">Apex Cleaning</td><td class="t2a">$890.75</td><td class="t2s">● ready</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tx2-tot">14 payments · $27,834.25 total</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="p2-stats">
+    <div class="p2-stat"><span class="p2-sn">3 hrs</span><span class="p2-sl">saved per week</span></div>
+    <div class="p2-stat"><span class="p2-sn">100%</span><span class="p2-sl">of formats parsed</span></div>
+    <div class="p2-stat"><span class="p2-sn">$0</span><span class="p2-sl">manual data entry</span></div>
+  </div>
+
+  <div class="p2-sec">
+    <p class="p2-sec-ey">How it works</p>
+    <h2 class="p2-sec-h2">Three steps. Then you're done.</h2>
+    <div class="p2-steps">
+      <div class="p2-step">
+        <p class="p2-snum">01</p>
+        <div class="p2-sico"><i class="ti ti-mail" aria-hidden="true"></i></div>
+        <p class="p2-stit">Connect your email</p>
+        <p class="p2-sbod">OAuth with Gmail or Outlook. 30 seconds. We only touch remittance emails — nothing else in your inbox.</p>
+      </div>
+      <div class="p2-step">
+        <p class="p2-snum">02</p>
+        <div class="p2-sico"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+        <p class="p2-stit">We parse everything</p>
+        <p class="p2-sbod">ACH emails, HTML attachments, PDF remittance files. Every format, every payment, extracted automatically.</p>
+      </div>
+      <div class="p2-step">
+        <p class="p2-snum">03</p>
+        <div class="p2-sico"><i class="ti ti-check" aria-hidden="true"></i></div>
+        <p class="p2-stit">Batches ready</p>
+        <p class="p2-sbod">Payment batches built for RouteServ. QuickBooks entries created in the same pass. One click to submit.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="p2-feats">
+    <div class="p2-fgrid">
+      <div class="p2-fc">
+        <p class="p2-ftag"><i class="ti ti-files" aria-hidden="true"></i> Parsing</p>
+        <p class="p2-ftit">Every format, handled</p>
+        <p class="p2-fbod">HTML emails, ACH files, PDF attachments, PNG scans. If your franchisor sends it, we read it.</p>
+      </div>
+      <div class="p2-fc">
+        <p class="p2-ftag"><i class="ti ti-layers-intersect" aria-hidden="true"></i> Deduplication</p>
+        <p class="p2-ftit">Never process twice</p>
+        <p class="p2-fbod">The same payment can arrive three ways. Our deduplication logic ensures it posts exactly once.</p>
+      </div>
+      <div class="p2-fc">
+        <p class="p2-ftag"><i class="ti ti-refresh" aria-hidden="true"></i> Sync</p>
+        <p class="p2-ftit">QuickBooks, automated</p>
+        <p class="p2-fbod">QB entries created for every batch, mapped to your existing chart of accounts. Zero manual entry.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="p2-cta">
+    <h2 class="p2-cta-h">Connect your email today.</h2>
+    <p class="p2-cta-s">The average franchise operator spends hours on payment reconciliation every week. That time is yours back.</p>
+    <div class="p2-cta-acts">
+      <button class="p2-bfl">Get started free</button>
+      <button class="p2-bol">Schedule a demo</button>
+    </div>
+  </div>
+
+  <footer class="p2-footer">
+    <span class="p2-fcopy">© 2025 Prismspace Inc.</span>
+    <div class="p2-flinks"><span>Privacy</span><span>Terms</span><span>Contact</span></div>
+  </footer>
+</div>
+</div>
+</body>
+</html>
